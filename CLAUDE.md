@@ -10,6 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Paper deadline**: June 7, 2026
 - **Format**: 1-2 page, 2-column
 - **Primary documentation**: `LidarGS_Research.md` — the comprehensive research plan with code snippets, coordinate math, experiment design, and timeline
+- **Implementation Guide**: `LidarGS_Implementation_Guide.md` — 파일별 상세 구현 설계, API 시그니처, 데이터 흐름, 디버깅 전략
 
 ## Pipeline Architecture (4 stages)
 
