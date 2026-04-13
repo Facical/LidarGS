@@ -19,6 +19,14 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
+train = [
+    "torch>=2.1",
+    "torchvision>=0.16",
+    "gsplat>=1.0",
+    "torchmetrics>=1.0",
+    "lpips>=0.1.4",
+    "tensorboard>=2.14",
+]
 
 [tool.setuptools.packages.find]
 where = ["."]

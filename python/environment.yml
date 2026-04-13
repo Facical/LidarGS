@@ -1,5 +1,7 @@
 name: lidargs
 channels:
+  - pytorch
+  - nvidia
   - conda-forge
 dependencies:
   - python=3.10
@@ -10,5 +12,13 @@ dependencies:
   - tqdm>=4.65
   - matplotlib>=3.7
   - pytest>=7.0
+  - pytorch-cuda=12.1
   - pip:
     - open3d>=0.18
+    - torch>=2.1
+    - torchvision>=0.16
+    - torchaudio>=2.1
+    - gsplat>=1.0
+    - torchmetrics>=1.0
+    - lpips>=0.1.4
+    - tensorboard>=2.14

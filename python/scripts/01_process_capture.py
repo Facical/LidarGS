@@ -38,6 +38,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max_depth", type=float, default=5.0, help="최대 유효 깊이 (m)")
     parser.add_argument("--subsample", type=int, default=1, help="깊이 서브샘플링 간격")
     parser.add_argument("--visualize", action="store_true", help="Open3D 시각화 실행")
+    parser.add_argument("--run_colmap", action="store_true", help="Method A에 대해 COLMAP SfM 자동 실행")
+    parser.add_argument("--matcher_type", default="exhaustive", choices=["exhaustive", "sequential"],
+                        help="COLMAP matcher 유형 (기본: exhaustive)")
     return parser.parse_args()
 
 
@@ -129,11 +132,37 @@ def main() -> None:
     method_c_dir = output_dir / args.scene / "method_c_random"
     export_colmap_text(capture.frames, method_c_dir)
 
-    # Method A (COLMAP baseline) — 이미지만 복사
+    # Method A (COLMAP baseline) — 이미지 복사 + 선택적 COLMAP 실행
     method_a_dir = output_dir / args.scene / "method_a_colmap"
-    (method_a_dir / "images").mkdir(parents=True, exist_ok=True)
-    print(f"  Method A 이미지 디렉토리: {method_a_dir / 'images'}")
-    print("  → COLMAP SfM은 별도 실행 필요: colmap automatic_reconstructor ...")
+    method_a_images = method_a_dir / "images"
+    method_a_images.mkdir(parents=True, exist_ok=True)
+
+    import shutil
+    for frame in capture.frames:
+        src = frame.image_path
+        dst = method_a_images / src.name
+        if src.exists() and not dst.exists():
+            shutil.copy2(str(src), str(dst))
+
+    num_copied = len(list(method_a_images.glob("*.jpg"))) + len(list(method_a_images.glob("*.png")))
+    print(f"  Method A 이미지: {num_copied}장 → {method_a_images}")
+
+    if args.run_colmap:
+        from lidargs.io.run_colmap import run_colmap_sfm
+        print(f"  COLMAP SfM 실행 중 (matcher: {args.matcher_type})...")
+        colmap_result = run_colmap_sfm(
+            method_a_dir,
+            matcher_type=args.matcher_type,
+        )
+        if colmap_result["success"]:
+            print(f"  COLMAP 완료: {colmap_result['num_registered']}장 등록, "
+                  f"{colmap_result['num_points3d']}개 포인트, "
+                  f"{colmap_result['total_seconds']}초")
+        else:
+            print(f"  COLMAP 실패: {colmap_result['error']}")
+    else:
+        print("  → COLMAP SfM은 별도 실행 필요:")
+        print(f"    bash scripts/run_colmap.sh {method_a_dir}")
 
     print("[6/6] 완료!")
     print(f"  Method B: {method_b_dir}")
