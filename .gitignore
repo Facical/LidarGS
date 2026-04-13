@@ -5,3 +5,11 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+
+# iOS / Xcode
+*.xcuserstate
+xcuserdata/
+DerivedData/
+
+# 캡처 데이터 (대용량 바이너리)
+data/
