@@ -18,9 +18,13 @@ from lidargs.io.load_capture import CaptureData, FrameData
 # ---------------------------------------------------------------------------
 # 기본 상수
 # ---------------------------------------------------------------------------
+# 테스트용 대표값. 프로덕션 코드는 metadata.json에서 동적으로 읽으므로
+# 실제 캡처 해상도와 무관하게 동작한다.
+# ARKit 비디오: 1080p(1920×1080) 또는 4K(3840×2160) 모두 지원.
 RGB_WIDTH, RGB_HEIGHT = 1920, 1080
+# LiDAR 깊이 해상도는 iPhone 기종·영상 해상도에 관계없이 ARKit에서 항상 256×192.
 DEPTH_WIDTH, DEPTH_HEIGHT = 256, 192
-FOCAL_LENGTH = 1598.0  # iPhone 15 Pro 대표값
+FOCAL_LENGTH = 1598.0  # iPhone 15 Pro 1080p 대표값
 CX, CY = RGB_WIDTH / 2.0, RGB_HEIGHT / 2.0
 
 

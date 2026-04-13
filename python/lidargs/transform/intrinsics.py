@@ -37,6 +37,7 @@ def scale_intrinsics_for_depth(
 ) -> np.ndarray:
     """RGB intrinsics를 LiDAR depth 해상도로 스케일링.
 
-    예: RGB 1920x1080 → Depth 256x192
+    LiDAR 깊이 해상도는 iPhone 기종·영상 해상도에 관계없이 ARKit에서 항상 256×192.
+    rgb_size는 ARKit 영상 해상도에 따라 달라진다 (1080p: 1920×1080, 4K: 3840×2160).
     """
     return scale_intrinsics(K_rgb, rgb_size, depth_size)
